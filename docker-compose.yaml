@@ -1,0 +1,30 @@
+db:
+  environment:
+    - MYSQL_ROOT_PASSWORD=docker
+    - MYSQL_PASSWORD=docker
+    - MYSQL_USER=docker
+    - MYSQL_DATABASE=mechadog_development
+  build: ./docker/mysql
+
+app:
+  build: .
+  command: 'tail -f /dev/null'
+  volumes:
+    - .:/app
+  ports:
+    - "3000:3000"
+  links:
+    - db
+  environment:
+    - RAILS_DATABASE_USERNAME=root
+    - RAILS_DATABASE_PASSWORD=docker
+    - RAILS_DATABASE_NAME=mechadog_development
+    - RAILS_DATABASE_HOST=db
+
+nginx:
+  build: ./docker/nginx
+  links:
+    - app
+  command: nginx -g "daemon off;"
+  ports:
+    - "80:80"
