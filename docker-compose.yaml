@@ -3,3 +3,5 @@ app:
   command: 'tail -f /dev/null'
   volumes:
     - .:/go/src/mechadog
+  env_file:
+    - ./.env
